@@ -27,6 +27,10 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Service managing user profile, password, personal records, and body metrics.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class ProfileService {
 
@@ -54,12 +58,23 @@ public class ProfileService {
 		this.achievementService = achievementService;
 	}
 
+	/**
+	 * Returns the current user's profile with achievements, records, and metrics.
+	 * @return profile response for the authenticated user.
+	 */
 	@Transactional(readOnly = true)
 	public ProfileResponse getProfile() {
 		User user = currentUser();
 		return buildProfile(user, null);
 	}
 
+	/**
+	 * Updates username and/or email for the current user.
+	 * @param req update payload with optional username and email.
+	 * @param response HTTP response used to reissue session cookies when email changes.
+	 * @return updated profile; may include a new auth session when email changed.
+	 * @throws IllegalArgumentException if values are invalid or already in use.
+	 */
 	@Transactional
 	public ProfileResponse updateProfile(ProfileUpdateRequest req, HttpServletResponse response) {
 		User user = currentUser();
@@ -106,6 +121,11 @@ public class ProfileService {
 		return buildProfile(user, newSession);
 	}
 
+	/**
+	 * Changes the current user's password.
+	 * @param req current and new password values.
+	 * @throws IllegalArgumentException if the current password is incorrect.
+	 */
 	@Transactional
 	public void changePassword(PasswordChangeRequest req) {
 		User user = currentUser();
@@ -116,6 +136,11 @@ public class ProfileService {
 		userRepository.save(user);
 	}
 
+	/**
+	 * Adds a personal record for the current user.
+	 * @param req record payload with title, weight, reps, and optional notes.
+	 * @return the created personal record.
+	 */
 	@Transactional
 	public PersonalRecordResponse addPersonalRecord(PersonalRecordCreateRequest req) {
 		User user = currentUser();
@@ -129,6 +154,13 @@ public class ProfileService {
 		return toRecordDto(r);
 	}
 
+	/**
+	 * Updates an existing personal record.
+	 * @param id unique identifier of the record.
+	 * @param req fields to update.
+	 * @return the updated personal record.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the record does not exist.
+	 */
 	@Transactional
 	public PersonalRecordResponse updatePersonalRecord(long id, PersonalRecordUpdateRequest req) {
 		User user = currentUser();
@@ -149,6 +181,11 @@ public class ProfileService {
 		return toRecordDto(r);
 	}
 
+	/**
+	 * Deletes a personal record owned by the current user.
+	 * @param id unique identifier of the record.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the record does not exist.
+	 */
 	@Transactional
 	public void deletePersonalRecord(long id) {
 		User user = currentUser();
@@ -157,6 +194,11 @@ public class ProfileService {
 		personalRecordRepository.delete(r);
 	}
 
+	/**
+	 * Adds a body measurement entry for the current user.
+	 * @param req measurement payload with weight, body fat, and optional circumferences.
+	 * @return the created body metric.
+	 */
 	@Transactional
 	public BodyMetricResponse addBodyMetric(BodyMetricCreateRequest req) {
 		User user = currentUser();
@@ -173,6 +215,11 @@ public class ProfileService {
 		return toMetricDto(m);
 	}
 
+	/**
+	 * Deletes a body measurement owned by the current user.
+	 * @param id unique identifier of the measurement.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the measurement does not exist.
+	 */
 	@Transactional
 	public void deleteBodyMetric(long id) {
 		User user = currentUser();
