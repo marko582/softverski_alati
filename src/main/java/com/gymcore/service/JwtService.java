@@ -13,6 +13,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 
+/**
+ * Service for creating and validating JWT access tokens.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class JwtService {
 
@@ -35,6 +39,11 @@ public class JwtService {
 		return key;
 	}
 
+	/**
+	 * Generates a signed JWT access token for the given user.
+	 * @param user the authenticated user.
+	 * @return compact JWT string.
+	 */
 	public String generateAccessToken(User user) {
 		long exp = properties.getJwt().getAccessExpirationMs();
 		Instant now = Instant.now();
@@ -47,10 +56,21 @@ public class JwtService {
 				.compact();
 	}
 
+	/**
+	 * Extracts the email (subject) claim from a JWT.
+	 * @param token the JWT to parse.
+	 * @return email address stored in the token subject.
+	 */
 	public String extractEmail(String token) {
 		return parseClaims(token).getSubject();
 	}
 
+	/**
+	 * Checks whether the token belongs to the user and has not expired.
+	 * @param token the JWT to validate.
+	 * @param user the expected user details.
+	 * @return {@code true} if the token is valid for the user.
+	 */
 	public boolean isTokenValid(String token, UserDetails user) {
 		String subject = extractEmail(token);
 		return subject != null && subject.equalsIgnoreCase(user.getUsername()) && !isExpired(token);

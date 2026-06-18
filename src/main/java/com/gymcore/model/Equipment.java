@@ -9,16 +9,22 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Equipment type used by catalog exercises (e.g. barbell, dumbbell).
+ * @author Marko Mijailovic (marko582)
+ */
 @Entity
 @Table(name = "equipments")
 @Getter
 @Setter
 public class Equipment {
 
+	/** Unique identifier. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	/** Equipment name; unique across the catalog. */
 	@Column(nullable = false, unique = true, length = 100)
 	private String name;
 }

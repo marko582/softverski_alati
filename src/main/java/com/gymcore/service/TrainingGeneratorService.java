@@ -18,6 +18,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service generating AI training plans via an Ollama chat API.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class TrainingGeneratorService {
 
@@ -38,6 +42,12 @@ public class TrainingGeneratorService {
 		this.objectMapper = objectMapper;
 	}
 
+	/**
+	 * Generates a markdown training plan from user goals and constraints.
+	 * @param req generation parameters including goal, experience, and equipment.
+	 * @return response containing the generated plan text.
+	 * @throws org.springframework.web.server.ResponseStatusException if Ollama is disabled, unreachable, or returns an error.
+	 */
 	public TrainingGenerateResponse generate(TrainingGenerateRequest req) {
 		GymcoreProperties.Ollama ollama = properties.getOllama();
 		if (!ollama.isEnabled()) {

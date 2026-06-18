@@ -9,16 +9,22 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Muscle group or body region targeted by catalog exercises.
+ * @author Marko Mijailovic (marko582)
+ */
 @Entity
 @Table(name = "body_parts")
 @Getter
 @Setter
 public class BodyPart {
 
+	/** Unique identifier. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	/** Body part name; unique across the catalog. */
 	@Column(nullable = false, unique = true, length = 100)
 	private String name;
 }

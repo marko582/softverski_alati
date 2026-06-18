@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Service managing workout templates for the authenticated user.
+ * Handles creation, retrieval, update, and soft deletion of workouts.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class WorkoutService {
 
@@ -30,6 +35,10 @@ public class WorkoutService {
 		this.workoutRepository = workoutRepository;
 	}
 
+	/**
+	 * Lists all non-deleted workouts owned by the current user.
+	 * @return summary list ordered by creation date descending.
+	 */
 	@Transactional(readOnly = true)
 	public List<WorkoutSummaryResponse> listMine() {
 		User user = currentUser();
@@ -43,6 +52,12 @@ public class WorkoutService {
 				.toList();
 	}
 
+	/**
+	 * Retrieves a workout owned by the current user.
+	 * @param id unique identifier of the workout.
+	 * @return workout detail including exercises.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the workout does not exist or is deleted.
+	 */
 	@Transactional(readOnly = true)
 	public WorkoutDetailResponse getMine(long id) {
 		User user = currentUser();
@@ -51,6 +66,11 @@ public class WorkoutService {
 		return toDetail(w);
 	}
 
+	/**
+	 * Creates a new workout template for the current user.
+	 * @param req creation payload with name, description, and exercises.
+	 * @return detail of the persisted workout.
+	 */
 	@Transactional
 	public WorkoutDetailResponse create(WorkoutCreateRequest req) {
 		User user = currentUser();
@@ -64,6 +84,13 @@ public class WorkoutService {
 		return toDetail(w);
 	}
 
+	/**
+	 * Updates an existing workout owned by the current user.
+	 * @param id unique identifier of the workout.
+	 * @param req update payload with name, description, and exercises.
+	 * @return detail of the updated workout.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the workout does not exist or is deleted.
+	 */
 	@Transactional
 	public WorkoutDetailResponse update(long id, WorkoutUpdateRequest req) {
 		User user = currentUser();
@@ -77,6 +104,11 @@ public class WorkoutService {
 		return toDetail(w);
 	}
 
+	/**
+	 * Soft-deletes a workout owned by the current user.
+	 * @param id unique identifier of the workout.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the workout does not exist or is already deleted.
+	 */
 	@Transactional
 	public void softDelete(long id) {
 		User user = currentUser();

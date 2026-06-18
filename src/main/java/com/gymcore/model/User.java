@@ -18,37 +18,51 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Application user account implementing Spring Security {@link UserDetails}.
+ * Stores credentials, refresh-token state, and profile identifiers.
+ * @author Marko Mijailovic (marko582)
+ */
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 public class User implements UserDetails {
 
+	/** Unique identifier. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	/** Display name shown in the UI; unique across users. */
 	@Column(name = "username", nullable = false, unique = true, length = 50)
 	private String displayName;
 
+	/** Login email; used as Spring Security username. */
 	@Column(nullable = false, unique = true, length = 255)
 	private String email;
 
+	/** BCrypt password hash. */
 	@Column(name = "password_hash", nullable = false, length = 255)
 	private String passwordHash;
 
+	/** Account creation timestamp. */
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 
+	/** Last profile or credential update timestamp. */
 	@Column(name = "updated_at", nullable = false)
 	private Instant updatedAt;
 
+	/** When false, the account is locked and cannot authenticate. */
 	@Column(name = "is_active", nullable = false)
 	private boolean active = true;
 
+	/** SHA-256 hash of the current refresh token, if any. */
 	@Column(name = "refresh_token_hash", length = 64)
 	private String refreshTokenHash;
 
+	/** Expiration time of the stored refresh token. */
 	@Column(name = "refresh_token_expires_at")
 	private Instant refreshTokenExpiresAt;
 

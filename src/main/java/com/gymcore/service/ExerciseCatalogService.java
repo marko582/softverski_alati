@@ -15,6 +15,10 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+/**
+ * Service for read-only access to the exercise catalog, equipment list, and instructions.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 @Transactional(readOnly = true)
 public class ExerciseCatalogService {
@@ -32,12 +36,23 @@ public class ExerciseCatalogService {
 		this.instructionRepository = instructionRepository;
 	}
 
+	/**
+	 * Returns all catalog exercises with body-part tags.
+	 * @return list of exercise responses.
+	 */
 	public List<ExerciseResponse> findAll() {
 		return exerciseRepository.findAllWithBodyParts().stream()
 				.map(ex -> toResponse(ex, true))
 				.toList();
 	}
 
+	/**
+	 * Filters exercises by body part, equipment, and/or difficulty.
+	 * @param bodyPart optional body-part filter.
+	 * @param equipment optional equipment filter.
+	 * @param difficulty optional difficulty filter.
+	 * @return matching exercise summaries.
+	 */
 	public List<ExerciseResponse> filter(String bodyPart, String equipment, String difficulty) {
 		String bp = blankToNull(bodyPart);
 		String eq = blankToNull(equipment);
@@ -55,12 +70,24 @@ public class ExerciseCatalogService {
 				.toList();
 	}
 
+	/**
+	 * Retrieves a single exercise by id.
+	 * @param id catalog exercise identifier.
+	 * @return exercise detail without body-part list.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the exercise does not exist.
+	 */
 	public ExerciseResponse findById(int id) {
 		CatalogExercise ex = exerciseRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
 		return toResponse(ex, false);
 	}
 
+	/**
+	 * Returns step-by-step instructions for an exercise.
+	 * @param exerciseId catalog exercise identifier.
+	 * @return ordered instruction steps.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the exercise does not exist.
+	 */
 	public List<InstructionResponse> findInstructionsByExerciseId(int exerciseId) {
 		if (!exerciseRepository.existsById(exerciseId)) {
 			throw new ResourceNotFoundException("Exercise not found");
@@ -70,6 +97,10 @@ public class ExerciseCatalogService {
 				.toList();
 	}
 
+	/**
+	 * Returns all equipment types in the catalog.
+	 * @return list of equipment entries.
+	 */
 	public List<EquipmentResponse> findAllEquipments() {
 		return equipmentRepository.findAll().stream()
 				.map(eq -> new EquipmentResponse(eq.getId(), eq.getName()))
