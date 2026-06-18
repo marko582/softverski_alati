@@ -20,33 +20,45 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A live or completed gym session for a user.
+ * May be started from a {@link Workout} template or as a custom session.
+ * @author Marko Mijailovic (marko582)
+ */
 @Entity
 @Table(name = "workout_sessions")
 @Getter
 @Setter
 public class WorkoutSession {
 
+	/** Unique identifier. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	/** User who performed this session. */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	/** Source workout template; null for custom sessions. */
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "workout_id")
 	private Workout workout;
 
+	/** Session title shown in history. */
 	@Column(name = "title", nullable = false, length = 255)
 	private String title;
 
+	/** When the session was started. */
 	@Column(name = "started_at", nullable = false)
 	private Instant startedAt;
 
+	/** When the session was marked complete; null while active. */
 	@Column(name = "completed_at")
 	private Instant completedAt;
 
+	/** Exercise lines tracked during this session. */
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("sortOrder ASC, id ASC")
 	private List<WorkoutSessionItem> items = new ArrayList<>();
