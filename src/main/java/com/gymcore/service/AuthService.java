@@ -26,6 +26,11 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
 
+/**
+ * Service managing user registration, login, token refresh, and logout.
+ * Issues JWT access tokens and httpOnly refresh-token cookies.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class AuthService {
 
@@ -50,6 +55,13 @@ public class AuthService {
 		this.properties = properties;
 	}
 
+	/**
+	 * Registers a new user and starts an authenticated session.
+	 * @param request registration payload with username, email, and password.
+	 * @param response HTTP response used to set the refresh-token cookie.
+	 * @return auth response containing the access token and user info.
+	 * @throws IllegalArgumentException if email or username is already in use.
+	 */
 	@Transactional
 	public AuthResponse register(RegisterRequest request, HttpServletResponse response) {
 		if (userRepository.existsByEmail(request.email())) {
@@ -67,6 +79,12 @@ public class AuthService {
 		return issueSession(user, response);
 	}
 
+	/**
+	 * Authenticates a user and starts a new session.
+	 * @param request login payload with email and password.
+	 * @param response HTTP response used to set the refresh-token cookie.
+	 * @return auth response containing the access token and user info.
+	 */
 	@Transactional
 	public AuthResponse login(LoginRequest request, HttpServletResponse response) {
 		var token = new UsernamePasswordAuthenticationToken(
@@ -77,6 +95,13 @@ public class AuthService {
 		return issueSession(user, response);
 	}
 
+	/**
+	 * Rotates the access token using a valid refresh-token cookie.
+	 * @param request HTTP request carrying the refresh-token cookie.
+	 * @param response HTTP response used to set a new refresh-token cookie.
+	 * @return auth response with a new access token.
+	 * @throws org.springframework.web.server.ResponseStatusException if the refresh token is missing, invalid, or expired.
+	 */
 	@Transactional
 	public AuthResponse refresh(HttpServletRequest request, HttpServletResponse response) {
 		String raw = readRefreshCookie(request)
@@ -91,6 +116,11 @@ public class AuthService {
 		return issueSession(user, response);
 	}
 
+	/**
+	 * Invalidates the refresh token and clears the refresh-token cookie.
+	 * @param request HTTP request carrying the refresh-token cookie.
+	 * @param response HTTP response used to clear the cookie.
+	 */
 	@Transactional
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		readRefreshCookie(request).ifPresent(raw -> {
@@ -100,6 +130,12 @@ public class AuthService {
 		appendClearRefreshCookie(response);
 	}
 
+	/**
+	 * Re-issues access and refresh tokens for an already authenticated user (e.g. after email change).
+	 * @param user the user to issue a session for.
+	 * @param response HTTP response used to set the refresh-token cookie.
+	 * @return auth response containing new tokens.
+	 */
 	@Transactional
 	public AuthResponse reissueSession(User user, HttpServletResponse response) {
 		return issueSession(user, response);
