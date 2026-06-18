@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Service managing live workout sessions for the authenticated user.
+ * Handles starting sessions from templates or custom exercises, patching progress, and completion.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class WorkoutSessionService {
 
@@ -36,6 +41,10 @@ public class WorkoutSessionService {
 		this.workoutRepository = workoutRepository;
 	}
 
+	/**
+	 * Lists all sessions for the current user ordered by start time descending.
+	 * @return session summaries including active/completed state.
+	 */
 	@Transactional(readOnly = true)
 	public List<SessionSummaryResponse> listMine() {
 		User user = currentUser();
@@ -44,6 +53,11 @@ public class WorkoutSessionService {
 				.toList();
 	}
 
+	/**
+	 * Lists completed sessions with items since the given instant (for dashboard).
+	 * @param since lower bound for session completion time.
+	 * @return detailed session list.
+	 */
 	@Transactional(readOnly = true)
 	public List<SessionDetailResponse> listCompletedDetailsSince(Instant since) {
 		User user = currentUser();
@@ -52,6 +66,12 @@ public class WorkoutSessionService {
 				.toList();
 	}
 
+	/**
+	 * Retrieves a session owned by the current user.
+	 * @param id unique identifier of the session.
+	 * @return session detail with items.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the session does not exist.
+	 */
 	@Transactional(readOnly = true)
 	public SessionDetailResponse getMine(long id) {
 		User user = currentUser();
@@ -60,6 +80,13 @@ public class WorkoutSessionService {
 		return toDetail(s);
 	}
 
+	/**
+	 * Starts a new session from a workout template or custom exercise list.
+	 * @param req start payload with optional workout id, title, and custom items.
+	 * @return detail of the created session.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the referenced workout does not exist.
+	 * @throws IllegalArgumentException if a custom session has no exercises.
+	 */
 	@Transactional
 	public SessionDetailResponse start(SessionStartRequest req) {
 		User user = currentUser();
@@ -203,6 +230,15 @@ public class WorkoutSessionService {
 		return BigDecimal.valueOf(kg).setScale(2, RoundingMode.HALF_UP);
 	}
 
+	/**
+	 * Partially updates sets done, reps, or weights for a session item.
+	 * @param sessionId unique identifier of the session.
+	 * @param itemId unique identifier of the session item.
+	 * @param patch fields to update (setsDone, repsPerSet, and/or weightsKg).
+	 * @return updated session detail.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the session or item does not exist.
+	 * @throws IllegalArgumentException if the session is completed or patch is invalid.
+	 */
 	@Transactional
 	public SessionDetailResponse patchItem(long sessionId, long itemId, SessionItemPatchRequest patch) {
 		User user = currentUser();
@@ -247,6 +283,12 @@ public class WorkoutSessionService {
 		return toDetail(session);
 	}
 
+	/**
+	 * Marks a session as completed.
+	 * @param sessionId unique identifier of the session.
+	 * @return updated session detail with completion timestamp.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the session does not exist.
+	 */
 	@Transactional
 	public SessionDetailResponse complete(long sessionId) {
 		User user = currentUser();
@@ -258,6 +300,11 @@ public class WorkoutSessionService {
 		return toDetail(session);
 	}
 
+	/**
+	 * Permanently deletes a session owned by the current user.
+	 * @param id unique identifier of the session.
+	 * @throws com.gymcore.exception.ResourceNotFoundException if the session does not exist.
+	 */
 	@Transactional
 	public void deleteMine(long id) {
 		User user = currentUser();
