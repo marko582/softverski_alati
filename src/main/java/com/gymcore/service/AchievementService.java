@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Service evaluating and persisting user achievement unlocks.
+ * Syncs earned badges based on workout, session, PR, and body-metric activity.
+ * @author Marko Mijailovic (marko582)
+ */
 @Service
 public class AchievementService {
 
@@ -55,6 +60,8 @@ public class AchievementService {
 
 	/**
 	 * Persists newly earned achievements and returns the full list with unlock state.
+	 * @param userId unique identifier of the user.
+	 * @return all achievement definitions with unlock status for the user.
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<AchievementDto> syncAndList(Long userId) {
