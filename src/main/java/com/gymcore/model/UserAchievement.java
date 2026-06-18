@@ -15,6 +15,11 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+/**
+ * Links a {@link User} to an unlocked {@link Achievement}.
+ * Each user may earn a given achievement at most once.
+ * @author Marko Mijailovic (marko582)
+ */
 @Entity
 @Table(
 		name = "user_achievements",
@@ -23,18 +28,22 @@ import java.time.Instant;
 @Setter
 public class UserAchievement {
 
+	/** Unique identifier. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	/** User who earned the achievement. */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	/** Achievement that was unlocked. */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "achievement_id", nullable = false)
 	private Achievement achievement;
 
+	/** When the achievement was first earned. */
 	@Column(name = "unlocked_at", nullable = false)
 	private Instant unlockedAt = Instant.now();
 }
