@@ -33,17 +33,32 @@ public class UserAchievement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+<<<<<<< Updated upstream
 	/** User who earned the achievement. */
+=======
+	/** User who earned the achievement. Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+<<<<<<< Updated upstream
 	/** Achievement that was unlocked. */
+=======
+	/** Achievement that was unlocked. Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "achievement_id", nullable = false)
 	private Achievement achievement;
 
+<<<<<<< Updated upstream
 	/** When the achievement was first earned. */
+=======
+	/** When the achievement was first earned. Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@Column(name = "unlocked_at", nullable = false)
 	private Instant unlockedAt = Instant.now();
 }

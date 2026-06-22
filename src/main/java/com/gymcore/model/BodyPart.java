@@ -24,7 +24,13 @@ public class BodyPart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+<<<<<<< Updated upstream
 	/** Body part name; unique across the catalog. */
+=======
+	/** Body part name; unique across the catalog. Invalid values: null, blank, or length greater than 100. */
+	@NotBlank
+	@Size(max = 100)
+>>>>>>> Stashed changes
 	@Column(nullable = false, unique = true, length = 100)
 	private String name;
 }

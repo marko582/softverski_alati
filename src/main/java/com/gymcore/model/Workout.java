@@ -36,12 +36,23 @@ public class Workout {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+<<<<<<< Updated upstream
 	/** Owner of this workout template. */
+=======
+	/** Owner of this workout template. Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+<<<<<<< Updated upstream
 	/** Workout display name. */
+=======
+	/** Workout display name. Invalid values: null, blank, or length greater than 100. */
+	@NotBlank
+	@Size(max = 100)
+>>>>>>> Stashed changes
 	@Column(nullable = false, length = 100)
 	private String name;
 

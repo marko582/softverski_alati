@@ -35,11 +35,17 @@ public class WorkoutExercise {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+<<<<<<< Updated upstream
 	/** Parent workout template. */
+=======
+	/** Parent workout template. Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "workout_id", nullable = false)
 	private Workout workout;
 
+<<<<<<< Updated upstream
 	/** Exercise identifier. */
 	@Column(name = "exercise_id", nullable = false)
 	private Long exerciseId;
@@ -61,13 +67,50 @@ public class WorkoutExercise {
 	private int sortOrder;
 
 	/** Per-set weight values in kilograms (JSON array). */
+=======
+	/** Exercise identifier. Invalid values: null, zero, or negative. */
+	@NotNull
+	@Positive
+	@Column(name = "exercise_id", nullable = false)
+	private Long exerciseId;
+
+	/** Number of planned sets. Invalid values: less than 1 or greater than 99. */
+	@Min(1)
+	@Max(99)
+	@Column(nullable = false)
+	private int sets = 3;
+
+	/** Default reps for sets without per-set overrides. Invalid values: less than 1 or greater than 9999. */
+	@Min(1)
+	@Max(9999)
+	@Column(nullable = false)
+	private int reps = 10;
+
+	/** Rest between sets in seconds. Invalid values: negative. */
+	@Min(0)
+	@Column(name = "rest_seconds", nullable = false)
+	private int restSeconds = 90;
+
+	/** Display order within the workout. Invalid values: negative. */
+	@Min(0)
+	@Column(name = "sort_order", nullable = false)
+	private int sortOrder;
+
+	/** Per-set weight values in kilograms (JSON array). Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "set_weights_kg", nullable = false, columnDefinition = "jsonb")
 	private List<BigDecimal> setWeightsKg = new ArrayList<>();
 
+<<<<<<< Updated upstream
 	/** Per-set rep targets (JSON array). */
+=======
+	/** Per-set rep targets (JSON array). Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JdbcTypeCode(SqlTypes.JSON)

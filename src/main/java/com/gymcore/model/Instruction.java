@@ -27,16 +27,31 @@ public class Instruction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+<<<<<<< Updated upstream
 	/** Parent catalog exercise. */
+=======
+	/** Parent catalog exercise. Invalid values: {@code null}. */
+	@NotNull
+>>>>>>> Stashed changes
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "exercise_id", nullable = false)
 	private CatalogExercise exercise;
 
+<<<<<<< Updated upstream
 	/** Step sequence number starting at 1. */
 	@Column(name = "step_number", nullable = false)
 	private int stepNumber;
 
 	/** Instruction text for this step. */
+=======
+	/** Step sequence number starting at 1. Invalid values: less than 1. */
+	@Min(1)
+	@Column(name = "step_number", nullable = false)
+	private int stepNumber;
+
+	/** Instruction text for this step. Invalid values: null or blank. */
+	@NotBlank
+>>>>>>> Stashed changes
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String description;
 }
