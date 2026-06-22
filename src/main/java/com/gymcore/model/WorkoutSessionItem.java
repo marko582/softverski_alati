@@ -9,6 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,31 +40,41 @@ public class WorkoutSessionItem {
 	private Long id;
 
 	/** Parent workout session. */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "session_id", nullable = false)
 	private WorkoutSession session;
 
 	/** Catalog exercise identifier. */
+	@NotNull
+	@Positive
 	@Column(name = "exercise_id", nullable = false)
 	private Long exerciseId;
 
 	/** Display order within the session. */
+	@Min(0)
 	@Column(name = "sort_order", nullable = false)
 	private int sortOrder;
 
 	/** Total sets planned for this exercise. */
+	@Min(1)
+	@Max(99)
 	@Column(name = "sets_planned", nullable = false)
 	private int setsPlanned;
 
 	/** Default reps per set when no per-set override exists. */
+	@Min(1)
+	@Max(9999)
 	@Column(name = "reps_planned", nullable = false)
 	private int repsPlanned;
 
 	/** Number of sets completed so far. */
+	@Min(0)
 	@Column(name = "sets_done", nullable = false)
 	private int setsDone;
 
 	/** Per-set weight values in kilograms (JSON array). */
+	@NotNull
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JdbcTypeCode(SqlTypes.JSON)
@@ -68,6 +82,7 @@ public class WorkoutSessionItem {
 	private List<BigDecimal> setWeightsKg = new ArrayList<>();
 
 	/** Per-set rep targets (JSON array). */
+	@NotNull
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
 	@JdbcTypeCode(SqlTypes.JSON)

@@ -13,6 +13,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,11 +41,14 @@ public class Workout {
 	private Long id;
 
 	/** Owner of this workout template. */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	/** Workout display name. */
+	@NotBlank
+	@Size(max = 100)
 	@Column(nullable = false, length = 100)
 	private String name;
 
@@ -58,6 +65,7 @@ public class Workout {
 	private boolean deleted = false;
 
 	/** Ordered exercise lines belonging to this workout. */
+	@Valid
 	@OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("sortOrder ASC, id ASC")
 	private List<WorkoutExercise> exercises = new ArrayList<>();

@@ -9,6 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,15 +31,18 @@ public class Instruction {
 	private Integer id;
 
 	/** Parent catalog exercise. */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "exercise_id", nullable = false)
 	private CatalogExercise exercise;
 
 	/** Step sequence number starting at 1. */
+	@Min(1)
 	@Column(name = "step_number", nullable = false)
 	private int stepNumber;
 
 	/** Instruction text for this step. */
+	@NotBlank
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String description;
 }

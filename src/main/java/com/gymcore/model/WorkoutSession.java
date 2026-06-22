@@ -13,6 +13,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +41,7 @@ public class WorkoutSession {
 	private Long id;
 
 	/** User who performed this session. */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
@@ -47,6 +52,8 @@ public class WorkoutSession {
 	private Workout workout;
 
 	/** Session title shown in history. */
+	@NotBlank
+	@Size(max = 255)
 	@Column(name = "title", nullable = false, length = 255)
 	private String title;
 
@@ -59,6 +66,7 @@ public class WorkoutSession {
 	private Instant completedAt;
 
 	/** Exercise lines tracked during this session. */
+	@Valid
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("sortOrder ASC, id ASC")
 	private List<WorkoutSessionItem> items = new ArrayList<>();
