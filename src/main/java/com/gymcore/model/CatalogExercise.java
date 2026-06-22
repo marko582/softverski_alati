@@ -12,6 +12,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,10 +40,12 @@ public class CatalogExercise {
 	private Integer id;
 
 	/** Exercise display name. */
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
 	/** URL or path to a preview image. */
+	@NotBlank
 	@Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
 	private String imageUrl = "";
 
@@ -49,14 +54,19 @@ public class CatalogExercise {
 	private String videoUrl;
 
 	/** Category such as strength or cardio. */
+	@NotBlank
+	@Size(max = 50)
 	@Column(name = "exercise_type", nullable = false, length = 50)
 	private String exerciseType = "";
 
 	/** Difficulty level (e.g. beginner, intermediate, advanced). */
+	@NotBlank
+	@Size(max = 50)
 	@Column(nullable = false, length = 50)
 	private String difficulty = "";
 
 	/** Short overview text. */
+	@NotBlank
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String overview = "";
 
@@ -77,6 +87,7 @@ public class CatalogExercise {
 	private Set<Equipment> equipments = new HashSet<>();
 
 	/** Ordered execution steps. */
+	@Valid
 	@OneToMany(mappedBy = "exercise", fetch = FetchType.LAZY)
 	@OrderBy("stepNumber ASC")
 	private List<Instruction> instructions = new ArrayList<>();

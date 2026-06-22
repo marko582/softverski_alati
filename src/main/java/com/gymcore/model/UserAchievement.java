@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,16 +35,19 @@ public class UserAchievement {
 	private Long id;
 
 	/** User who earned the achievement. */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	/** Achievement that was unlocked. */
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "achievement_id", nullable = false)
 	private Achievement achievement;
 
 	/** When the achievement was first earned. */
+	@NotNull
 	@Column(name = "unlocked_at", nullable = false)
 	private Instant unlockedAt = Instant.now();
 }

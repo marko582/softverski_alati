@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,14 +39,22 @@ public class User implements UserDetails {
 	private Long id;
 
 	/** Display name shown in the UI; unique across users. */
+	@NotBlank
+	@Size(min = 3, max = 50)
+	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username must be alphanumeric (underscore allowed)")
 	@Column(name = "username", nullable = false, unique = true, length = 50)
 	private String displayName;
 
 	/** Login email; used as Spring Security username. */
+	@NotBlank
+	@Email
+	@Size(max = 255)
 	@Column(nullable = false, unique = true, length = 255)
 	private String email;
 
 	/** BCrypt password hash. */
+	@NotBlank
+	@Size(max = 255)
 	@Column(name = "password_hash", nullable = false, length = 255)
 	private String passwordHash;
 
@@ -59,6 +71,7 @@ public class User implements UserDetails {
 	private boolean active = true;
 
 	/** SHA-256 hash of the current refresh token, if any. */
+	@Size(max = 64)
 	@Column(name = "refresh_token_hash", length = 64)
 	private String refreshTokenHash;
 
