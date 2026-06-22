@@ -37,35 +37,35 @@ public class UserPersonalRecord {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/** Owner of this record. */
+	/** Owner of this record. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	/** Exercise or lift name. */
+	/** Exercise or lift name. Invalid values: null, blank, or length greater than 120. */
 	@NotBlank
 	@Size(max = 120)
 	@Column(nullable = false, length = 120)
 	private String title;
 
-	/** Weight lifted in kilograms. */
+	/** Weight lifted in kilograms. Invalid values: less than 0.01 or greater than 999999.99. */
 	@DecimalMin("0.01")
 	@DecimalMax("999999.99")
 	@Column(name = "weight_kg", precision = 8, scale = 2)
 	private BigDecimal weightKg;
 
-	/** Rep count for the record. */
+	/** Rep count for the record. Invalid values: less than 1 or greater than 9999. */
 	@Min(1)
 	@Max(9999)
 	private Integer reps;
 
-	/** When the record was logged. */
+	/** When the record was logged. Invalid values: {@code null}. */
 	@NotNull
 	@Column(name = "recorded_at", nullable = false)
 	private Instant recordedAt = Instant.now();
 
-	/** Optional free-text notes. */
+	/** Optional free-text notes. Invalid values: length greater than 500. */
 	@Size(max = 500)
 	@Column(length = 500)
 	private String notes;

@@ -34,19 +34,19 @@ public class UserAchievement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/** User who earned the achievement. */
+	/** User who earned the achievement. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	/** Achievement that was unlocked. */
+	/** Achievement that was unlocked. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "achievement_id", nullable = false)
 	private Achievement achievement;
 
-	/** When the achievement was first earned. */
+	/** When the achievement was first earned. Invalid values: {@code null}. */
 	@NotNull
 	@Column(name = "unlocked_at", nullable = false)
 	private Instant unlockedAt = Instant.now();

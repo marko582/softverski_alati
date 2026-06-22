@@ -40,13 +40,13 @@ public class Workout {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/** Owner of this workout template. */
+	/** Owner of this workout template. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	/** Workout display name. */
+	/** Workout display name. Invalid values: null, blank, or length greater than 100. */
 	@NotBlank
 	@Size(max = 100)
 	@Column(nullable = false, length = 100)

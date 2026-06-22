@@ -39,12 +39,12 @@ public class CatalogExercise {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	/** Exercise display name. */
+	/** Exercise display name. Invalid values: null or blank. */
 	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
-	/** URL or path to a preview image. */
+	/** URL or path to a preview image. Invalid values: null or blank. */
 	@NotBlank
 	@Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
 	private String imageUrl = "";
@@ -53,19 +53,19 @@ public class CatalogExercise {
 	@Column(name = "video_url", columnDefinition = "TEXT")
 	private String videoUrl;
 
-	/** Category such as strength or cardio. */
+	/** Category such as strength or cardio. Invalid values: null, blank, or length greater than 50. */
 	@NotBlank
 	@Size(max = 50)
 	@Column(name = "exercise_type", nullable = false, length = 50)
 	private String exerciseType = "";
 
-	/** Difficulty level (e.g. beginner, intermediate, advanced). */
+	/** Difficulty level (e.g. beginner, intermediate, advanced). Invalid values: null, blank, or length greater than 50. */
 	@NotBlank
 	@Size(max = 50)
 	@Column(nullable = false, length = 50)
 	private String difficulty = "";
 
-	/** Short overview text. */
+	/** Short overview text. Invalid values: null or blank. */
 	@NotBlank
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String overview = "";

@@ -38,21 +38,21 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/** Display name shown in the UI; unique across users. */
+	/** Display name shown in the UI; unique across users. Invalid values: null, blank, length outside 3–50, or non-alphanumeric characters (except underscore). */
 	@NotBlank
 	@Size(min = 3, max = 50)
 	@Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username must be alphanumeric (underscore allowed)")
 	@Column(name = "username", nullable = false, unique = true, length = 50)
 	private String displayName;
 
-	/** Login email; used as Spring Security username. */
+	/** Login email; used as Spring Security username. Invalid values: null, blank, invalid email format, or length greater than 255. */
 	@NotBlank
 	@Email
 	@Size(max = 255)
 	@Column(nullable = false, unique = true, length = 255)
 	private String email;
 
-	/** BCrypt password hash. */
+	/** BCrypt password hash. Invalid values: null, blank, or length greater than 255. */
 	@NotBlank
 	@Size(max = 255)
 	@Column(name = "password_hash", nullable = false, length = 255)
@@ -70,7 +70,7 @@ public class User implements UserDetails {
 	@Column(name = "is_active", nullable = false)
 	private boolean active = true;
 
-	/** SHA-256 hash of the current refresh token, if any. */
+	/** SHA-256 hash of the current refresh token, if any. Invalid values: length greater than 64. */
 	@Size(max = 64)
 	@Column(name = "refresh_token_hash", length = 64)
 	private String refreshTokenHash;

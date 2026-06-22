@@ -26,7 +26,7 @@ public class Equipment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	/** Equipment name; unique across the catalog. */
+	/** Equipment name; unique across the catalog. Invalid values: null, blank, or length greater than 100. */
 	@NotBlank
 	@Size(max = 100)
 	@Column(nullable = false, unique = true, length = 100)

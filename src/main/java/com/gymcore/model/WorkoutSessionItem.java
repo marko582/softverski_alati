@@ -39,41 +39,41 @@ public class WorkoutSessionItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/** Parent workout session. */
+	/** Parent workout session. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "session_id", nullable = false)
 	private WorkoutSession session;
 
-	/** Catalog exercise identifier. */
+	/** Catalog exercise identifier. Invalid values: null, zero, or negative. */
 	@NotNull
 	@Positive
 	@Column(name = "exercise_id", nullable = false)
 	private Long exerciseId;
 
-	/** Display order within the session. */
+	/** Display order within the session. Invalid values: negative. */
 	@Min(0)
 	@Column(name = "sort_order", nullable = false)
 	private int sortOrder;
 
-	/** Total sets planned for this exercise. */
+	/** Total sets planned for this exercise. Invalid values: less than 1 or greater than 99. */
 	@Min(1)
 	@Max(99)
 	@Column(name = "sets_planned", nullable = false)
 	private int setsPlanned;
 
-	/** Default reps per set when no per-set override exists. */
+	/** Default reps per set when no per-set override exists. Invalid values: less than 1 or greater than 9999. */
 	@Min(1)
 	@Max(9999)
 	@Column(name = "reps_planned", nullable = false)
 	private int repsPlanned;
 
-	/** Number of sets completed so far. */
+	/** Number of sets completed so far. Invalid values: negative. */
 	@Min(0)
 	@Column(name = "sets_done", nullable = false)
 	private int setsDone;
 
-	/** Per-set weight values in kilograms (JSON array). */
+	/** Per-set weight values in kilograms (JSON array). Invalid values: {@code null}. */
 	@NotNull
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -81,7 +81,7 @@ public class WorkoutSessionItem {
 	@Column(name = "set_weights_kg", nullable = false, columnDefinition = "jsonb")
 	private List<BigDecimal> setWeightsKg = new ArrayList<>();
 
-	/** Per-set rep targets (JSON array). */
+	/** Per-set rep targets (JSON array). Invalid values: {@code null}. */
 	@NotNull
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
