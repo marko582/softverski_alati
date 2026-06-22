@@ -30,18 +30,18 @@ public class Instruction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	/** Parent catalog exercise. */
+	/** Parent catalog exercise. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "exercise_id", nullable = false)
 	private CatalogExercise exercise;
 
-	/** Step sequence number starting at 1. */
+	/** Step sequence number starting at 1. Invalid values: less than 1. */
 	@Min(1)
 	@Column(name = "step_number", nullable = false)
 	private int stepNumber;
 
-	/** Instruction text for this step. */
+	/** Instruction text for this step. Invalid values: null or blank. */
 	@NotBlank
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String description;

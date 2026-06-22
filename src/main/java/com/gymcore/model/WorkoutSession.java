@@ -40,7 +40,7 @@ public class WorkoutSession {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/** User who performed this session. */
+	/** User who performed this session. Invalid values: {@code null}. */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -51,7 +51,7 @@ public class WorkoutSession {
 	@JoinColumn(name = "workout_id")
 	private Workout workout;
 
-	/** Session title shown in history. */
+	/** Session title shown in history. Invalid values: null, blank, or length greater than 255. */
 	@NotBlank
 	@Size(max = 255)
 	@Column(name = "title", nullable = false, length = 255)
