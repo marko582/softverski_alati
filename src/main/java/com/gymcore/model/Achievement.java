@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Table(name = "achievements")
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Achievement {
 
 	/** Stable achievement code used in unlock logic. Invalid values: null, blank, or length greater than 64. */
@@ -25,6 +27,7 @@ public class Achievement {
 	@Size(max = 64)
 	@Id
 	@Column(length = 64)
+	@EqualsAndHashCode.Include
 	private String id;
 
 	/** Short badge title. Invalid values: null, blank, or length greater than 120. */
